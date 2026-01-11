@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier - MG TELECOM FTTH</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .nav-brand {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--light);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Calendar Header */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        
+        .month-navigation {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-arrow:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .current-month {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            min-width: 250px;
+            text-align: center;
+        }
+        
+        .calendar-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        
+        .calendar-day {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 15px;
+            min-height: 120px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendar-day.empty {
+            background: transparent;
+            border: 1px dashed var(--border);
+            opacity: 0.5;
+        }
+        
+        .calendar-day.has-dossiers {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+            cursor: pointer;
+        }
+        
+        .calendar-day.has-dossiers:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .day-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 10px;
+        }
+        
+        .has-dossiers .day-number {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dossier-count {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .dossier-list {
+            margin-top: 10px;
+        }
+        
+        .dossier-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: var(--light);
+            border-left: 3px solid var(--primary);
+        }
+        
+        /* Dossiers List */
+        .dossiers-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            margin-top: 40px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .selected-date {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .dossiers-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .dossier-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        
+        .dossier-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .dossier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .dossier-team {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .dossier-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .dossier-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .info-value {
+            font-size: 14px;
+            color: var(--light);
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .calendar-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .calendar-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <div class="nav-brand">📅 Calendrier FTTH</div>
+            <div class="nav-links">
+                <a href="dashboard_admin.html" class="nav-btn">Dashboard Admin</a>
+                <a href="#" class="nav-btn">Aujourd'hui</a>
+                <a href="#" class="nav-btn">Mois précédent</a>
+                <a href="#" class="nav-btn">Mois suivant</a>
+            </div>
+        </nav>
+        
+        <div class="calendar-header">
+            <div class="month-navigation">
+                <div class="nav-arrow" onclick="changeMonth(-1)">←</div>
+                <div class="current-month" id="currentMonth">JANUARY 2026</div>
+                <div class="nav-arrow" onclick="changeMonth(1)">→</div>
+            </div>
+            <div class="calendar-actions">
+                <a href="#" class="action-btn" onclick="showToday()">📅 Aujourd'hui</a>
+                <a href="#" class="action-btn" onclick="exportCalendar()">📤 Exporter</a>
+            </div>
+        </div>
+        
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Les jours de la semaine -->
+            <div class="calendar-day-header">LUN</div>
+            <div class="calendar-day-header">MAR</div>
+            <div class="calendar-day-header">MER</div>
+            <div class="calendar-day-header">JEU</div>
+            <div class="calendar-day-header">VEN</div>
+            <div class="calendar-day-header">SAM</div>
+            <div class="calendar-day-header">DIM</div>
+        </div>
+        
+        <div class="dossiers-section" id="dossiersSection">
+            <div class="section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Dossiers du <span class="selected-date" id="selectedDate">11 January 2026</span>
+            </div>
+            <div class="dossiers-list" id="dossiersList">
+                <!-- Les dossiers seront chargés ici -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+        
+        // Noms des mois en français
+        const monthNames = [
+            "JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN",
+            "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"
+        ];
+        
+        // Données des dossiers (simulées - à remplacer par les vraies données)
+        const dossiersData = {
+            "2026-01-12": [{"team": "WINAT", "count": 2, "clients": 2}],
+        };
+        
+        function generateCalendar(year, month) {
+            const calendarGrid = document.getElementById('calendarGrid');
+            // Nettoyer le calendrier sauf les en-têtes
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+            
+            // Mettre à jour le mois affiché
+            document.getElementById('currentMonth').textContent = monthNames[month] + ' ' + year;
+            
+            // Premier jour du mois
+            const firstDay = new Date(year, month, 1);
+            // Dernier jour du mois
+            const lastDay = new Date(year, month + 1, 0);
+            // Jour de la semaine du premier jour (0 = dimanche, 1 = lundi, etc.)
+            const firstDayOfWeek = firstDay.getDay();
+            // Nombre de jours dans le mois
+            const daysInMonth = lastDay.getDate();
+            
+            // Ajuster pour commencer le lundi
+            let startDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+            
+            // Ajouter les jours vides avant le premier jour
+            for (let i = 0; i < startDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Ajouter les jours du mois
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                const date = new Date(year, month, day);
+                const dateString = date.toISOString().split('T')[0];
+                
+                dayElement.className = 'calendar-day fade-in';
+                dayElement.style.animationDelay = (day * 0.02) + 's';
+                
+                // Vérifier si cette date a des dossiers
+                const hasDossiers = dossiersData[dateString];
+                if (hasDossiers) {
+                    dayElement.classList.add('has-dossiers');
+                    dayElement.onclick = () => showDossiers(date);
+                    
+                    const dossierCount = hasDossiers.reduce((sum, dossier) => sum + dossier.count, 0);
+                    
+                    const dossierCountBadge = document.createElement('div');
+                    dossierCountBadge.className = 'dossier-count';
+                    dossierCountBadge.textContent = dossierCount;
+                    dayElement.appendChild(dossierCountBadge);
+                    
+                    // Afficher les premières équipes
+                    const dossierList = document.createElement('div');
+                    dossierList.className = 'dossier-list';
+                    hasDossiers.slice(0, 2).forEach(dossier => {
+                        const dossierItem = document.createElement('div');
+                        dossierItem.className = 'dossier-item';
+                        dossierItem.textContent = dossier.team + ' (' + dossier.count + ')';
+                        dossierList.appendChild(dossierItem);
+                    });
+                    if (hasDossiers.length > 2) {
+                        const moreItem = document.createElement('div');
+                        moreItem.className = 'dossier-item';
+                        moreItem.textContent = '+' + (hasDossiers.length - 2) + ' autres';
+                        dossierList.appendChild(moreItem);
+                    }
+                    dayElement.appendChild(dossierList);
+                }
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                
+                // Marquer aujourd'hui
+                const today = new Date();
+                if (date.getDate() === today.getDate() && 
+                    date.getMonth() === today.getMonth() && 
+                    date.getFullYear() === today.getFullYear()) {
+                    dayElement.style.borderColor = '#10b981';
+                    dayElement.style.boxShadow = 'inset 0 0 0 2px #10b981';
+                }
+                
+                dayElement.appendChild(dayNumber);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Afficher les dossiers d'aujourd'hui
+            showDossiers(currentDate);
+        }
+        
+        function showDossiers(date) {
+            const dateString = date.toISOString().split('T')[0];
+            const dossiers = dossiersData[dateString] || [];
+            const dossiersList = document.getElementById('dossiersList');
+            const selectedDate = document.getElementById('selectedDate');
+            
+            // Mettre à jour la date sélectionnée
+            selectedDate.textContent = date.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }).toUpperCase();
+            
+            // Vider la liste
+            dossiersList.innerHTML = '';
+            
+            if (dossiers.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.textAlign = 'center';
+                emptyMessage.style.padding = '40px';
+                emptyMessage.style.color = 'var(--gray)';
+                emptyMessage.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+                    <h3 style="color: var(--light); margin-bottom: 10px;">Aucun dossier</h3>
+                    <p>Aucune installation programmée pour cette date.</p>
+                `;
+                dossiersList.appendChild(emptyMessage);
+                return;
+            }
+            
+            // Afficher chaque dossier
+            dossiers.forEach(dossier => {
+                const dossierCard = document.createElement('div');
+                dossierCard.className = 'dossier-card fade-in';
+                
+                dossierCard.innerHTML = `
+                    <div class="dossier-header">
+                        <div style="font-weight: 600; color: var(--light);">${dossier.team}</div>
+                        <div class="dossier-team">${dossier.count} installation(s)</div>
+                    </div>
+                    <div class="dossier-content">
+                        <div class="dossier-info">
+                            <div class="info-label">Équipe</div>
+                            <div class="info-value">${dossier.team}</div>
+                        </div>
+                        <div class="dossier-info">
+                            <div class="info-label">Installations</div>
+                            <div class="info-value">${dossier.count} client(s)</div>
+                        </div>
+                        <div class="dossier-info">
+                            <div class="info-label">Statut</div>
+                            <div class="info-value" style="color: #10b981;">● EN COURS</div>
+                        </div>
+                    </div>
+                `;
+                
+                dossierCard.onclick = () => {
+                    window.location.href = 'dashboard_' + dossier.team + '.html';
+                };
+                
+                dossiersList.appendChild(dossierCard);
+            });
+        }
+        
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentYear, currentMonth);
+        }
+        
+        function showToday() {
+            currentDate = new Date();
+            currentYear = currentDate.getFullYear();
+            currentMonth = currentDate.getMonth();
+            generateCalendar(currentYear, currentMonth);
+        }
+        
+        function exportCalendar() {
+            alert('Fonction d'export à implémenter');
+        }
+        
+        // Initialiser le calendrier
+        generateCalendar(currentYear, currentMonth);
+        
+        // Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach((day, index) => {
+                day.style.animationDelay = (index * 0.02) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
