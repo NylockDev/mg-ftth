@@ -483,6 +483,13 @@
         <div class="sidebar-section">
             <div class="section-title">équipes actives</div>
 
+            <a href="dashboard_STI.html" class="nav-item">
+                <svg viewbox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
+                    <path d="m17 20h5v-2a3 3 0 00-5.356-1.857m17 20h7m10 0v-2c0-.656-.126-1.283-.356-1.857m7 20h2v-2a3 3 0 015.356-1.857m7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0m15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zm7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                STI <span style="margin-left: auto; color: var(--primary);">1</span>
+            </a>
+
             <a href="dashboard_WINAT.html" class="nav-item">
                 <svg viewbox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
                     <path d="m17 20h5v-2a3 3 0 00-5.356-1.857m17 20h7m10 0v-2c0-.656-.126-1.283-.356-1.857m7 20h2v-2a3 3 0 015.356-1.857m7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0m15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zm7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -495,8 +502,8 @@
         <div class="sidebar-section">
             <div class="section-title">Dernières Actions</div>
             <div style="color: var(--gray); font-size: 13px; padding: 0 20px;">
-                <div style="margin-bottom: 10px;">✅ Dernière mise à jour : <br><span style="color: var(--light);">Dossier du 12-01-2026</span></div>
-                <div>📊 Base de données : <br><span style="color: var(--light);">2 clients</span></div>
+                <div style="margin-bottom: 10px;">✅ Dernière mise à jour : <br><span style="color: var(--light);">Dossier du 11-01-2026</span></div>
+                <div>📊 Base de données : <br><span style="color: var(--light);">3 clients</span></div>
             </div>
         </div>
     </aside>
@@ -522,28 +529,28 @@
             <div class="stat-card fade-in">
                 <div class="stat-header">
                     <div class="stat-icon">📊</div>
-                    <div class="stat-number">1</div>
+                    <div class="stat-number">2</div>
                 </div>
                 <div class="stat-label">Dossiers Actifs</div>
             </div>
             <div class="stat-card fade-in" style="animation-delay: 0.1s;">
                 <div class="stat-header">
                     <div class="stat-icon">📡</div>
-                    <div class="stat-number">2</div>
+                    <div class="stat-number">3</div>
                 </div>
                 <div class="stat-label">Installations</div>
             </div>
             <div class="stat-card fade-in" style="animation-delay: 0.2s;">
                 <div class="stat-header">
                     <div class="stat-icon">👥</div>
-                    <div class="stat-number">1</div>
+                    <div class="stat-number">2</div>
                 </div>
                 <div class="stat-label">Équipes Actives</div>
             </div>
             <div class="stat-card fade-in" style="animation-delay: 0.3s;">
                 <div class="stat-header">
                     <div class="stat-icon">📈</div>
-                    <div class="stat-number">0</div>
+                    <div class="stat-number">1</div>
                 </div>
                 <div class="stat-label">Dossiers Aujourd'hui</div>
             </div>
@@ -577,6 +584,42 @@
                         <div class="equipe-actions">
                             <a href="dashboard_WINAT.html" class="equipe-btn equipe-btn-primary">Voir Dashboard</a>
                             <a href="calendar.html?date=12-01-2026" class="equipe-btn equipe-btn-secondary">Voir Détails</a>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="quick-actions">
+                    <a href="#" class="action-btn">📥 Exporter PDF</a>
+                    <a href="#" class="action-btn">📊 Voir Statistiques</a>
+                    <a href="#" class="action-btn">📋 Liste Complète</a>
+                </div>
+            </div>
+
+            <div class="dossier-card fade-in" data-date="11-01-2026">
+                <div class="dossier-header">
+                    <div class="dossier-date">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        11-01-2026
+                    </div>
+                    <div class="dossier-count">1 installation(s)</div>
+                </div>
+                
+                <div class="equipes-grid">
+
+                    <div class="equipe-card" onclick="window.location.href='dashboard_STI.html'">
+                        <div class="equipe-header">
+                            <div class="equipe-avatar">S</div>
+                            <div>
+                                <div class="equipe-name">STI</div>
+                                <div class="equipe-stats">1 installation(s)</div>
+                            </div>
+                        </div>
+                        <div class="equipe-actions">
+                            <a href="dashboard_STI.html" class="equipe-btn equipe-btn-primary">Voir Dashboard</a>
+                            <a href="calendar.html?date=11-01-2026" class="equipe-btn equipe-btn-secondary">Voir Détails</a>
                         </div>
                     </div>
 
