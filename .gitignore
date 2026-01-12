@@ -4,4 +4,5 @@ token.json
 mg_telecom_db.json
 NOUVEAUX_CLIENTS_MGT*
 TEST
+*.xlsx
 __pycache__
